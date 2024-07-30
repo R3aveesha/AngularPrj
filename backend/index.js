@@ -43,7 +43,7 @@ app.get('/emp', (req, res) => {
 //get single data
 app.get('/emp/:id',(req,res)=>{
     let Eid =req.params.id;
-    let qr = `select * from employee where id=${Eid}`
+    let qr = `select * from employee where emp_id=${Eid}`
     connection.query(qr,(err,result)=>{
         if(err,(err,result)){
             if(err){console.log(err)}
@@ -74,6 +74,7 @@ app.post('/emp',(req,res)=>{
 
     let qr = `insert into employee(emp_name,address,phone_no) values('${emp_name}','${address}','${phone_no}')`
 
+    console.log(qr,'qr')
     connection.query(qr,(err,result)=>{
         if(err){console.log(err)}
 
