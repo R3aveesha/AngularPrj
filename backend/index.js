@@ -70,9 +70,9 @@ app.post('/emp',(req,res)=>{
 
     let emp_name = req.body.emp_name;
     let  address = req.body.address;
-    let phone_no = req.body.phone_no;
+    let phone_number = req.body.phone_number;
 
-    let qr = `insert into employee(emp_name,address,phone_no) values('${emp_name}','${address}','${phone_no}')`
+    let qr = `insert into employee(emp_name,address,phone_no) values('${emp_name}','${address}','${phone_number}')`
 
     console.log(qr,'qr')
     connection.query(qr,(err,result)=>{
@@ -83,12 +83,10 @@ app.post('/emp',(req,res)=>{
                 message:'data inserted'
             });
         }else{
-            res.send({
-                message:'wrong....'
+            res.status(400).send({
+                message:'failed to insert data'
             })
         }
     })
-
-
 
 })
