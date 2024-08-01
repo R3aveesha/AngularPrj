@@ -68,6 +68,8 @@ app.get('/emp/:id',(req,res)=>{
 app.post('/emp',(req,res)=>{
     console.log(req.body,'createdata');
 
+  let Eid = req.params.id;
+
     let emp_name = req.body.emp_name;
     let address = req.body.address;
     let phone_number = req.body.phone_number;
@@ -95,11 +97,33 @@ app.post('/emp',(req,res)=>{
 
 //update data 
 
-app.put('/user',(req,res)=>{
-    console.log(req.body,'updatedata');
+app.put('/user/:id',(req,res)=>{
+    
+    let Eid =req.params.id;
 
     let emp_name = req.body.emp_name;
     let address = req.body.address;
     let phone_number = req.body.phone_number;
-    
+
+    let qr=`update employee set emp_name=${emp_name},address=${address},phone_number=${phone_number}
+            where Eid=${Eid}`
+
+    connection.query(qr,[emp_name, address, phone_number,Eid],(err,res)=>{
+        if(err){
+            console.log(err);
+
+                return res.status(500).json({
+                message: 'Database update failed',
+                error: err
+            });
+        }
+        else{
+            res.json({
+                message:'data updated'
+            })
+        }
+    })
+
 })
+
+export default app;
