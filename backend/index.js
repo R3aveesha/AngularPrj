@@ -69,24 +69,37 @@ app.post('/emp',(req,res)=>{
     console.log(req.body,'createdata');
 
     let emp_name = req.body.emp_name;
-    let  address = req.body.address;
+    let address = req.body.address;
     let phone_number = req.body.phone_number;
 
-    let qr = `insert into employee(emp_name,address,phone_no) values('${emp_name}','${address}','${phone_number}')`
+    let qr = `insert into employee(emp_name,address,phone_number) values('${emp_name}','${address}','${phone_number}')`
 
     console.log(qr,'qr')
-    connection.query(qr,(err,result)=>{
-        if(err){console.log(err)}
+    connection.query(qr,[emp_name, address, phone_number],(err,result)=>{
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ error: err.message });
+        }
 
         if(result.length>0){
             res.send({
                 message:'data inserted'
             });
-        }else{
-            res.status(400).send({
-                message:'failed to insert data'
-            })
+        }else{ 
+            res.json({
+                message: 'Data inserted successfully'
+            });
         }
     })
+})
 
+//update data 
+
+app.put('/user',(req,res)=>{
+    console.log(req.body,'updatedata');
+
+    let emp_name = req.body.emp_name;
+    let address = req.body.address;
+    let phone_number = req.body.phone_number;
+    
 })
