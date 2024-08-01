@@ -97,33 +97,52 @@ app.post('/emp',(req,res)=>{
 
 //update data 
 
-app.put('/user/:id',(req,res)=>{
-    
-    let Eid =req.params.id;
+app.put('/emp/:id', (req, res) => {
+    let Eid = req.params.id;
 
     let emp_name = req.body.emp_name;
     let address = req.body.address;
     let phone_number = req.body.phone_number;
 
-    let qr=`update employee set emp_name=${emp_name},address=${address},phone_number=${phone_number}
-            where Eid=${Eid}`
+    let qr = `UPDATE employee SET emp_name = ?, address = ?, phone_number = ? WHERE emp_id = ?`;
 
-    connection.query(qr,[emp_name, address, phone_number,Eid],(err,res)=>{
-        if(err){
+    connection.query(qr, [emp_name, address, phone_number, Eid], (err, result) => {
+        if (err) {
             console.log(err);
-
-                return res.status(500).json({
+            return res.status(500).json({
                 message: 'Database update failed',
                 error: err
             });
         }
-        else{
-            res.json({
-                message:'data updated'
-            })
+        res.json({
+            message: 'Data updated successfully'
+        });
+    });
+});
+
+app.delete('/emp/:id', (req, res) => {
+    let Eid = req.params.id;
+    let qr = `DELETE FROM employee WHERE emp_id = ?`;
+
+    connection.query(qr, [Eid], (err, result) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({
+                message: 'Database delete failed',
+                error: err
+            });
         }
-    })
+        if (result.affectedRows > 0) {
+            res.json({
+                message: 'Data deleted successfully'
+            });
+        } else {
+            res.status(404).json({
+                message: 'Data not found'
+            });
+        }
+    });
+});
 
-})
 
-export default app;
+
